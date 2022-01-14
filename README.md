@@ -1,9 +1,9 @@
 # Clipper
-![Clipper Logo](./Clipper_Images/ClipperLogo.png "Logo")
+![Clipper Logo](./Clipper_Images/ClipperLogo.png "Clipper Logo")
+![Clipper Image](./Clipper_Images/ClipperMain.png "Clipper In Action")
 
-A macOS compact but powerful clipboard manager in your menu bar.
+A compact but powerful clipboard manager in macOS from the menu bar.
 
-----
 ## Installation
 ### Manual Installation
 The DMG Installer has been released on this github repository. You can download the installer alongside the source code under the Releases tab.
@@ -23,11 +23,9 @@ Currently working on getting Clipper on the Mac App Store for a more streamlined
 6. Select Clipper
    * Ensure that you are located in the Applications directory (or the directory where you installed Clipper if you did not install Clipper in Applications)
 
----
 ## Requirements
 Clipper will only run on macOS 12.0 (Monterey) or higher.
 
----
 ## Features
 Clipper is a lightweight and powerful Clipboard Manager. A list of currently supported features is below:
 
@@ -56,13 +54,14 @@ Clipper is a lightweight and powerful Clipboard Manager. A list of currently sup
    * You can not delete the latest item that is currently copied to your system Clipboard
       * Clipper will automatically add the item back when it checks for any changes on the system Clipboard
 
----
-## Contributing
+## Images
+![Clipper Detail](./Clipper_Images/ClipperDetail.png)
+![Clpper Star Functionality](./Clipper_Images/ClipperStar.png)
 
+## Contributing
 Clipper is open-source and free to any developers who are interested in making their own personal tweaks and modifications. If you are interested in contributing directly to this repository, feel free to contact me [here](https://www.ashwinc.me/#Contact).
 
 Otherwise, developers are encouraged to fork this repository and design a version of Clipper that meets their desired expectations.
 
----
 ## Disclaimers
 Clipper is currently in its Alpha build and is prone to various bugs and errors. If you are fortunate enough to encounter a bug, please create an issue on this repository or contact me [here](https://www.ashwinc.me/#Contact)!
