@@ -1,0 +1,9 @@
+#XCode Generated Files and Directories
+.DS_Store
+xcuserdata
+build
+Clipper.app
+Clipper.dmg
+
+#User Generated Files and Directories
+Todo
