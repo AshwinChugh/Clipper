@@ -24,7 +24,7 @@ Currently working on getting Clipper on the Mac App Store for a more streamlined
    * Ensure that you are located in the Applications directory (or the directory where you installed Clipper if you did not install Clipper in Applications)
 
 ## Requirements
-Clipper will only run on macOS 12.0 (Monterey) or higher.
+The latest release of Clipper will only run on macOS 11.0 (Big Sur) or higher.
 
 ## Features
 Clipper is a lightweight and powerful Clipboard Manager. A list of currently supported features is below:
