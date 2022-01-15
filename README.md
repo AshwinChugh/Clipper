@@ -8,7 +8,7 @@ A compact but powerful clipboard manager in macOS from the menu bar.
 ### Manual Installation
 The DMG Installer has been released on this github repository. You can download the installer alongside the source code under the Releases tab.
 
-Or you can simply click [here](https://www.ashwinc.me). A Clipper.dmg file will be downloaded. Open it and move the application into your application folder. For optimal usage, enable Clipper to start when you log into your Mac.
+Or you can simply click [here](https://github.com/AshwinChugh/Clipper/releases/tag/Alpha). A Clipper.dmg file will be downloaded. Open it and move the application into your application folder. For optimal usage, enable Clipper to start when you log into your Mac.
 
 ### Automatic Installation
 Currently working on getting Clipper on the Mac App Store for a more streamlined and seamless installation experience.
