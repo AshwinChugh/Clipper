@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BF0BF2C9278FCDCD00D4733F /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0BF2C8278FCDCD00D4733F /* CoreDataManager.swift */; };
 		BF137E9B279145A700631092 /* EntryOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF137E9A279145A700631092 /* EntryOptionView.swift */; };
+		BF3F369327932DFD00D67D5C /* CompatibilityExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3F369227932DFD00D67D5C /* CompatibilityExtensions.swift */; };
 		BF528A19278CEA3900A9CF1F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF528A18278CEA3900A9CF1F /* AppDelegate.swift */; };
 		BF58099E2790D7FE00A75F24 /* Entry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58099C2790D7FE00A75F24 /* Entry+CoreDataClass.swift */; };
 		BF58099F2790D7FE00A75F24 /* Entry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF58099D2790D7FE00A75F24 /* Entry+CoreDataProperties.swift */; };
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		BF0BF2C8278FCDCD00D4733F /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		BF137E9A279145A700631092 /* EntryOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryOptionView.swift; sourceTree = "<group>"; };
+		BF3F369227932DFD00D67D5C /* CompatibilityExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityExtensions.swift; sourceTree = "<group>"; };
 		BF528A18278CEA3900A9CF1F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF58099C2790D7FE00A75F24 /* Entry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		BF58099D2790D7FE00A75F24 /* Entry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				BF0BF2C8278FCDCD00D4733F /* CoreDataManager.swift */,
 				BF58099C2790D7FE00A75F24 /* Entry+CoreDataClass.swift */,
 				BF58099D2790D7FE00A75F24 /* Entry+CoreDataProperties.swift */,
+				BF3F369227932DFD00D67D5C /* CompatibilityExtensions.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -200,6 +203,7 @@
 				BFECAD84278BFE350009D852 /* ClipperApp.swift in Sources */,
 				BF5809A12790DF2C00A75F24 /* EntryTextView.swift in Sources */,
 				BFAD8C0C278E812B004B616B /* EntryImageView.swift in Sources */,
+				BF3F369327932DFD00D67D5C /* CompatibilityExtensions.swift in Sources */,
 				BF0BF2C9278FCDCD00D4733F /* CoreDataManager.swift in Sources */,
 				BF58099E2790D7FE00A75F24 /* Entry+CoreDataClass.swift in Sources */,
 				BF5809A32790DF3300A75F24 /* EntryView.swift in Sources */,
@@ -260,7 +264,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -315,7 +319,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = NO;
@@ -346,7 +350,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = me.ashwinc.Clipper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -377,7 +381,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = me.ashwinc.Clipper;
 				PRODUCT_NAME = "$(TARGET_NAME)";

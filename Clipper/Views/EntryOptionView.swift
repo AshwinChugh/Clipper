@@ -44,7 +44,7 @@ struct EntryOptionView: View {
                 .foregroundColor(.green)
             }
             .buttonStyle(.plain)
-            .background(.black)
+            .background(Color.black)
             .clipShape(Capsule())
             
             Spacer()
@@ -71,7 +71,7 @@ struct EntryOptionView: View {
                 .foregroundColor(.orange)
             }
             .buttonStyle(.plain)
-            .background(.black)
+            .background(Color.black)
             .clipShape(Capsule())
             
             Spacer()
@@ -92,7 +92,7 @@ struct EntryOptionView: View {
                 .foregroundColor(.red)
             }
             .buttonStyle(.plain)
-            .background(.black)
+            .background(Color.black)
             .clipShape(Capsule())
             
             Spacer()

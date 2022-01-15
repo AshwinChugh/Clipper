@@ -51,7 +51,7 @@ struct EntryTextView: View {
             }
         }
         .frame(maxWidth: 390)
-        .alert("Error", isPresented: $showingAlert) {
+        .bAlert("Error", isPresented: $showingAlert) {
             Button("Ok") {}
         } message: {
             Text(alertMessage)
@@ -95,4 +95,5 @@ struct EntryTextView: View {
             }
         }
     }
+    
 }

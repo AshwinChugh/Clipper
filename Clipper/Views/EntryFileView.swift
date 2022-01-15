@@ -56,7 +56,7 @@ struct EntryFileView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .alert("Error", isPresented: $showingAlert) {
+        .bAlert("Error", isPresented: $showingAlert) {
             Button("Ok") {}
         } message: {
             Text("Could not copy text to clipboard.")

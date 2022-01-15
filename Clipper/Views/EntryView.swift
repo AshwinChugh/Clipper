@@ -14,10 +14,10 @@ struct EntryView: View {
     
     var body: some View {
         MasterView()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(.gray)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .shadow(radius: 10)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.gray)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .shadow(radius: 10)
     }
     
     @ViewBuilder

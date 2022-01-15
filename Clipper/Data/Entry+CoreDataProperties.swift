@@ -59,7 +59,11 @@ extension Entry {
     }
     
     public var wrappedDate : Date {
-        return self.date ?? Date.now
+        if #available(macOS 12, *) {
+            return self.date ?? Date.now
+        } else {
+            return self.date ?? Date()
+        }
     }
     
     public var wrappedType : Int16 {

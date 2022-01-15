@@ -116,7 +116,11 @@ class PasteboardData : Hashable, Identifiable, Comparable, Saveable, ObservableO
         self.type = type
         self.data = data
         self.rawData = rawData
-        self.date = Date.now
+        if #available(macOS 12, *) {
+            self.date = Date.now
+        } else {
+            self.date = Date()
+        }
         self.entryReference = nil
     }
     

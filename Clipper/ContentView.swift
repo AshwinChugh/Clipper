@@ -51,7 +51,7 @@ struct ContentView: View {
                 }
             }
         }
-        .background(.black)
+        .background(Color.black)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
             PB.loadSavedData(savedItems)
