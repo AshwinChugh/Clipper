@@ -16,6 +16,7 @@ struct ClipperApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, coreDataManager.context.viewContext)
+                .frame(width: 400, height: 500, alignment: .center)
         }
     }
 }

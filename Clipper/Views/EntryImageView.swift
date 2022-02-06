@@ -36,7 +36,7 @@ struct EntryImageView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .topTrailing) {
+        ZStack(alignment: .top) {
             VStack(alignment: .center) {
                 Image(nsImage: image)
                     .resizable()
@@ -50,6 +50,8 @@ struct EntryImageView: View {
                     .font(.headline)
                     .multilineTextAlignment(.center)
                 Text(data.date, style: .date)
+                
+                
                 EntryOptionView(data: self.data, PB: self.PB)
                     .environment(\.managedObjectContext, self.moc)
                 

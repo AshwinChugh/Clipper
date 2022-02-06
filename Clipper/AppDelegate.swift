@@ -33,7 +33,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let window = NSApplication.shared.windows.first {
             window.close()
         }
+        print("Loaded")
     }
+    
     
     @objc func togglePopover(_ sender: AnyObject?) {
         if let button = self.statusBarItem?.button {

@@ -22,7 +22,7 @@ struct EntryTextView: View {
     
     
     var body : some View {
-        ZStack(alignment: .topTrailing) {
+        ZStack(alignment: .top) {
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
                     VStack {
