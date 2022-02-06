@@ -33,7 +33,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let window = NSApplication.shared.windows.first {
             window.close()
         }
-        print("Loaded")
     }
     
     
