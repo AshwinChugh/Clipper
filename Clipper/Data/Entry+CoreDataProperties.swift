@@ -2,7 +2,7 @@
 //  Entry+CoreDataProperties.swift
 //  Clipper
 //
-//  Created by Ashwin Chugh on 1/13/22.
+//  Created by Ashwin Chugh on 1/22/22.
 //
 //
 
@@ -17,17 +17,18 @@ extension Entry {
         return NSFetchRequest<Entry>(entityName: "Entry")
     }
 
+    @NSManaged public var data: Data?
+    @NSManaged public var date: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var name: String?
-    @NSManaged public var type: Int16
-    @NSManaged public var data: Data?
     @NSManaged public var rawData: Data?
-    @NSManaged public var date: Date?
+    @NSManaged public var type: Int16
+    @NSManaged public var category: NSSet?
     
     public var wrappedID : UUID {
         return id ?? UUID()
     }
-    
+        
     public var wrappedName : String {
         return self.name ?? "Unknown Name"
     }
@@ -69,6 +70,27 @@ extension Entry {
     public var wrappedType : Int16 {
         return self.type
     }
+    
+    public var wrappedCategories : Set<Category> {
+        return self.category as? Set<Category> ?? []
+    }
+
+}
+
+// MARK: Generated accessors for category
+extension Entry {
+
+    @objc(addCategoryObject:)
+    @NSManaged public func addToCategory(_ value: Category)
+
+    @objc(removeCategoryObject:)
+    @NSManaged public func removeFromCategory(_ value: Category)
+
+    @objc(addCategory:)
+    @NSManaged public func addToCategory(_ values: NSSet)
+
+    @objc(removeCategory:)
+    @NSManaged public func removeFromCategory(_ values: NSSet)
 
 }
 

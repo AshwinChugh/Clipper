@@ -11,32 +11,7 @@ import SwiftUI
 
 protocol Saveable : Hashable {
     var saved : Bool { get set }
-}
-
-extension Set where Element : Saveable {
-    func saved(_ cond : Bool) -> Set {
-        if cond {
-            return self.filter { elem in
-                elem.saved
-            }
-        }
-        return self
-    }
-}
-
-extension URL {
-    var isImage : Bool {
-        switch self.pathExtension {
-        case "png":
-            return true
-        case "jpg":
-            return true
-        case "jpeg":
-            return true
-        default:
-            return false
-        }
-    }
+    var categories : Set<Category> { get set }
 }
 
 enum PasteboardType : Int16 {
@@ -71,7 +46,7 @@ class PasteboardHistory : ObservableObject {
     
     func loadSavedData(_ savedItems : FetchedResults<Entry>) -> Void {
         for item in savedItems {
-            let newPasteboardItem = PasteboardData(entryReference: item, id: item.wrappedID, name: item.wrappedName, type: item.wrappedType, data: item.wrappedData, rawData: item.wrappedRawData, date: item.wrappedDate)
+            let newPasteboardItem = PasteboardData(entryReference: item, id: item.wrappedID, name: item.wrappedName, type: item.wrappedType, data: item.wrappedData, rawData: item.wrappedRawData, date: item.wrappedDate, categories: item.wrappedCategories)
             let (inserted, _) = history.insert(newPasteboardItem)
             if !inserted {
                 history.remove(newPasteboardItem)
@@ -85,6 +60,7 @@ class PasteboardHistory : ObservableObject {
 class PasteboardData : Hashable, Identifiable, Comparable, Saveable, ObservableObject {
     @Published var saved: Bool
     @Published var entryReference : Entry?
+    @Published var categories : Set<Category>
     
     let id : UUID
     let name : String
@@ -122,9 +98,10 @@ class PasteboardData : Hashable, Identifiable, Comparable, Saveable, ObservableO
             self.date = Date()
         }
         self.entryReference = nil
+        self.categories = []
     }
     
-    init(entryReference : Entry, id : UUID, name : String, type : Int16, data : Any, rawData : Data, date : Date) {
+    init(entryReference : Entry, id : UUID, name : String, type : Int16, data : Any, rawData : Data, date : Date, categories : Set<Category>) {
         self.id = id
         self.saved = true
         self.name = name
@@ -133,26 +110,72 @@ class PasteboardData : Hashable, Identifiable, Comparable, Saveable, ObservableO
         self.rawData = rawData
         self.date = date
         self.entryReference = entryReference
+        self.categories = categories
+    }
+    
+    func deleteSaved(_ moc : NSManagedObjectContext) -> Void {
+        moc.delete(self.entryReference!)
+        if moc.hasChanges {
+            do {
+                try moc.save()
+                self.entryReference = nil
+            } catch {
+                print("Could not delete entry")
+            }
+        }
+    }
+
+    func saveItem(_ moc : NSManagedObjectContext) -> Void {
+        let cdData = Entry(context: moc)
+        cdData.id = self.id
+        cdData.name = self.name
+        if self.type == .file {
+            let fileName = (self.data as! [String : Any])["Name"] as? String ?? "--File Name Error--"
+            cdData.data = Data(fileName.utf8)
+        } else if self.type == .text || self.type == .rtfd {
+            let strData = self.data as? String ?? "--Data Error--"
+            cdData.data = Data(strData.utf8)
+        } else {
+            let imageName = (self.data as! [String : Any])["Name"] as? String ?? "--Image Name Err--"
+            cdData.data = Data(imageName.utf8)
+        }
+        cdData.rawData = self.rawData
+        cdData.date = self.date
+        cdData.type = self.type.rawValue
+        cdData.category = NSSet(set: self.categories)
+        
+        self.entryReference = cdData
+        if moc.hasChanges {
+            do {
+                try moc.save()
+            } catch {
+                print("Could not save: \(error)")
+            }
+        }
     }
     
 }
 
 
-//Function that access system-wide pasteboard and returns tuple where tuple[0] is
-//the type and tuple[1] is the data (conforms to Any)
-//OPTIONAL --> If no data is found or there is an error, returns nil
+/*
+ Function that access system-wide pasteboard and returns tuple where tuple[0] is
+ the type and tuple[1] is the data (conforms to Any)
+ OPTIONAL --> If no data is found or there is an error, returns nil
+ Many options have not been implemented and this is a current limitation of Clipper.
+ These options have been left here for those who know how they work and want to provide
+ functionality to them.
+*/
 func readData(from pasteboard : NSPasteboard) -> (PasteboardType, Any, Data)? {
-    //resolve type
     if let items = pasteboard.pasteboardItems {
         for item in items {
             for type in item.types {
                 switch type {
                 case NSPasteboard.PasteboardType.URL:
-                    print("URL")
+                    break
                 case NSPasteboard.PasteboardType.color:
-                    print("Color")
+                    break
                 case NSPasteboard.PasteboardType.fileContents:
-                    print("File Contents")
+                    break
                 case NSPasteboard.PasteboardType.fileURL:
                     if let fileData = pasteboard.data(forType: .fileURL) {
                         guard let strURL = String(data: fileData, encoding: .utf8) else {return nil}
@@ -163,34 +186,34 @@ func readData(from pasteboard : NSPasteboard) -> (PasteboardType, Any, Data)? {
                         return (url.isImage ? PasteboardType.image : PasteboardType.file, imageArr, NSData(data: fileData)) as? (PasteboardType, Any, Data)
                     }
                 case NSPasteboard.PasteboardType.findPanelSearchOptions:
-                    print("Find panel")
+                    break
                 case NSPasteboard.PasteboardType.font:
-                    print("Font Info")
+                    break
                 case NSPasteboard.PasteboardType.html:
-                    print("HTML Info")
+                    break
                 case NSPasteboard.PasteboardType.multipleTextSelection:
-                    print("Multi-Text")
+                    break
                 case NSPasteboard.PasteboardType.pdf:
-                    print("PDF data")
+                    break
                 case NSPasteboard.PasteboardType.png:
                     guard let data = pasteboard.data(forType: .png) else {return nil}
                     return (PasteboardType.png, ["Name" : "Screenshot", "File" : NSImage(data: data) as Any], NSData(data: data)) as? (PasteboardType, Any, Data)
                 case NSPasteboard.PasteboardType.rtf:
-                    print("RTF Data is covered under rtfd")
-                case NSPasteboard.PasteboardType.rtfd://images + string
+                    break //this should never be implemented -- RTF data is RTFD data as well
+                case NSPasteboard.PasteboardType.rtfd:
                     guard let data = pasteboard.data(forType: .rtfd) else {return nil}
                     return (PasteboardType.rtfd, NSAttributedString(rtfd: data, documentAttributes: nil)?.string, NSData(data: data)) as? (PasteboardType, Any, Data) ?? nil
                 case NSPasteboard.PasteboardType.ruler:
-                    print("Ruler data")
+                    break
                 case NSPasteboard.PasteboardType.sound:
-                    print("Sound Data")
+                    break
                 case NSPasteboard.PasteboardType.string:
                     guard let data = pasteboard.data(forType: .string) else {return nil}
                     return (PasteboardType.text, String(data: data, encoding: .utf8), NSData(data: data)) as? (PasteboardType, Any, Data) ?? nil
                 case NSPasteboard.PasteboardType.tabularText:
-                    print("Tab Text Data")
+                    break
                 case NSPasteboard.PasteboardType.textFinderOptions:
-                    print("Text Finder")
+                    break
                 case NSPasteboard.PasteboardType.tiff:
                     guard let data = pasteboard.data(forType: .tiff) else {return nil}
                     return (PasteboardType.tiff, ["Name" : "<Anonymous Image>", "File" : NSImage(data: data) as Any], NSData(data: data)) as? (PasteboardType, Any, Data) ?? nil

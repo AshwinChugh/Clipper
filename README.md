@@ -8,7 +8,7 @@ A compact but powerful clipboard manager in macOS from the menu bar.
 ### Manual Installation
 The DMG Installer has been released on this github repository. You can download the installer alongside the source code under the Releases tab.
 
-Or you can simply click [here](https://github.com/AshwinChugh/Clipper/releases/tag/Alpha). A Clipper.dmg file will be downloaded. Open it and move the application into your application folder. For optimal usage, enable Clipper to start when you log into your Mac.
+Or you can simply click [here](#). A Clipper.dmg file will be downloaded. Open it and move the application into your applications folder. For optimal usage, enable Clipper to start when you log into your Mac.
 
 ### Automatic Installation
 Currently working on getting Clipper on the Mac App Store for a more streamlined and seamless installation experience.
@@ -53,10 +53,36 @@ Clipper is a lightweight and powerful Clipboard Manager. A list of currently sup
    * Deleting saved data will make Clipper automatically unsave and delete that data completely
    * You can not delete the latest item that is currently copied to your system Clipboard
       * Clipper will automatically add the item back when it checks for any changes on the system Clipboard
+* Clearing clipboard history
+   * Clicking the clear all button will clear the system clipboard
+   * The button will also delete and remove all **non-saved** items
+
+### Categories
+* Create unlimited categories to group clipboard items
+* Clicking on the category button on the top will only show items that have been assigned to that category
+* Items can be assigned to multiple categories
+* Categories must be unique
+   * The plus button on each item will open a view to assign new categories to the item
+   * The info button on the opposite side of the plus button will show all categories the item has been assigned to
+* Buttons will be disabled if there are no categories or if the item has not been assigned to any
+* **[IMPORTANT] To remove a cateogory from an item, triple click the category from the button's info view**
 
 ## Images
+Detail view of Clipper with no options/filters applied.
+The info button for each item has been clicked to show each item's category.
 ![Clipper Detail](./Clipper_Images/ClipperDetail.png)
-![Clpper Star Functionality](./Clipper_Images/ClipperStar.png)
+
+Creating a category
+![Clipper Create Category](./Clipper_Images/CreateCategoryImg.png)
+
+Assign a category to a cipboard item. Click on the plus button to open the category assigner view.
+![Clipper Assign Category](./Clipper_Images/CategoryAssignImg.png)
+
+Filter items according to a selected category
+![Clipper Category Filter](./Clipper_Images/CategoryFilterImg.png)
+
+Delete a category
+![Clipper Category Delete](./Clipper_Images/DeleteCategoryImg.png)
 
 ## Contributing
 Clipper is open-source and free to any developers who are interested in making their own personal tweaks and modifications. If you are interested in contributing directly to this repository, feel free to contact me [here](https://www.ashwinc.me/#Contact).

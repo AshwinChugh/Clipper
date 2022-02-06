@@ -9,10 +9,16 @@ import SwiftUI
 
 struct EntryFileView: View {
     @Environment(\.managedObjectContext) var moc
+    @FetchRequest(sortDescriptors: []) var categories : FetchedResults<Category>
     @ObservedObject var PB : PasteboardHistory
     @ObservedObject var data : PasteboardData
     @State var isSaved = false
     @State var showingAlert = false
+    @State var showCategories = false
+    @State private var alertMessage = "Error"
+    @State private var selectedCategory = ""
+    @State private var disableCategoryInfo = true
+    @State private var showCategoryAssigner = false
     
     
     var fileName : String {
@@ -24,82 +30,144 @@ struct EntryFileView: View {
     
     
     var body: some View {
-        VStack(alignment: .center) {
-            HStack(alignment: .center) {
-                VStack {
-                    Image(systemName: "shippingbox")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(minWidth: 20, idealWidth: 40, maxWidth: 60, minHeight: 20, idealHeight: 40, maxHeight: 60)
-                        .padding(.top)
-                    Text("Copied File")
-                        .font(.headline)
+        ZStack(alignment: .topTrailing) {
+            VStack(alignment: .center) {
+                HStack(alignment: .center) {
+                    VStack {
+                        Image(systemName: "shippingbox")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(minWidth: 20, idealWidth: 40, maxWidth: 60, minHeight: 20, idealHeight: 40, maxHeight: 60)
+                            .padding(.top)
+                        Text("Copied File")
+                            .font(.headline)
+                            .padding(.horizontal)
+                        Text(data.date, style: .date)
+                            .font(.subheadline)
+                            .padding(.horizontal)
+                    }
+                    Spacer()
+                    Text(fileName)
+                        .foregroundColor(.black)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.black)
+                        .font(.title.bold())
                         .padding(.horizontal)
-                    Text(data.date, style: .date)
-                        .font(.subheadline)
-                        .padding(.horizontal)
+                    Spacer()
                 }
+                .padding(.top, 5)
+                EntryOptionView(data: self.data, PB: self.PB)
+                    .environment(\.managedObjectContext, self.moc)
+                
+                if (showCategories) {
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(self.data.categories.sorted(), id: \.self) { category in
+                                CategoryView(category)
+                                    .onTapGesture(count: 3) {
+                                        withAnimation(.easeOut) {
+                                            self.data.categories.remove(category)
+                                            self.disableCategoryInfo = self.data.categories.isEmpty
+                                            if self.disableCategoryInfo {
+                                                self.showCategories.toggle()
+                                            }
+                                        }
+                                        if self.data.saved {
+                                            self.data.deleteSaved(self.moc)
+                                            self.data.saveItem(self.moc)
+                                            if moc.hasChanges {
+                                                try? moc.save()
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                    .padding(.bottom, 5)
+                }
+                
+                if (showCategoryAssigner) {
+                    CategoryAssignerView(selectedCategory: self.$selectedCategory, categories: self.categories, data: self.data) {
+                        if self.selectedCategory.isEmpty {
+                            self.alertMessage = "Invalid category selected;"
+                            self.showingAlert = true
+                            return
+                        }
+                        guard let targetCategory = self.categories.first(where: { value in
+                            value.wrappedName == self.selectedCategory
+                        }) else {print("Error in finding category"); return}
+                        self.data.categories.insert(targetCategory)
+                        self.disableCategoryInfo = self.data.categories.isEmpty
+                        
+                        if (self.data.saved) {
+                            self.data.deleteSaved(self.moc)
+                            self.data.saveItem(self.moc)
+                        }
+                        withAnimation(.easeOut) {
+                            showCategoryAssigner.toggle()
+                        }
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .bAlert("Error", isPresented: $showingAlert) {
+                Button("Ok") {}
+            } message: {
+                Text("Could not copy text to clipboard.")
+            }
+            
+            HStack {
+                Button {
+                    if self.showCategories {
+                        withAnimation(.easeIn) {
+                            self.showCategories.toggle()
+                        }
+                    }
+                    if self.showCategoryAssigner {
+                        withAnimation(.easeOut) {
+                            self.showCategoryAssigner.toggle()
+                        }
+                    } else {
+                        withAnimation(.easeIn) {
+                            self.showCategoryAssigner.toggle()
+                        }
+                    }
+                } label: {
+                    Image(systemName: "plus")
+                        .imageScale(.large)
+                }
+                .buttonStyle(.plain)
+                .offset(x: 2, y: 3)
+                .disabled(self.categories.isEmpty)
+                
+                
                 Spacer()
-                Text(fileName)
-                    .foregroundColor(.black)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.black)
-                    .font(.title.bold())
-                    .padding(.horizontal)
-                Spacer()
+                
+                CategoryButton(data: self.data) {
+                    if (self.showCategoryAssigner) {
+                        withAnimation(.easeIn) {
+                            self.showCategoryAssigner.toggle()
+                        }
+                    }
+                    if (self.showCategories) {
+                        withAnimation(.easeOut) {
+                            self.showCategories.toggle()
+                        }
+                    } else {
+                        withAnimation(.easeIn) {
+                            self.showCategories.toggle()
+                        }
+                    }
+                }
+                .disabled(self.disableCategoryInfo)
             }
-            .padding(.top, 5)
-            EntryOptionView(data: self.data, PB: self.PB) {
-                saveItem()
-            } deleteSaved: {
-                deleteSave()
-            }
+        }.onAppear {
+            self.disableCategoryInfo = self.data.categories.isEmpty
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .bAlert("Error", isPresented: $showingAlert) {
-            Button("Ok") {}
-        } message: {
-            Text("Could not copy text to clipboard.")
+        .onChange(of: self.data.categories) {_ in
+            self.disableCategoryInfo = self.data.categories.isEmpty
         }
     }
-    
-    func deleteSave() -> Void {
-        guard let entry = data.entryReference else {
-            print("Could not delete item from Core Data -- reference lost.")
-            return
-        }
-        moc.delete(entry)
-        if moc.hasChanges {
-            do {
-                try moc.save()
-                data.entryReference = nil
-                print("Entry deleted")
-            } catch {
-                print("Could not delete entry")
-            }
-        }
-    }
-    
-    func saveItem() -> Void {
-        let cdData = Entry(context: moc)
-        cdData.id = data.id
-        cdData.name = data.name
-        cdData.data = Data(self.fileName.utf8)
-        cdData.rawData = data.rawData
-        cdData.date = data.date
-        cdData.type = data.type.rawValue
-        
-        data.entryReference = cdData
-        if moc.hasChanges {
-            do {
-                try moc.save()
-                print("Entry saved")
-            } catch {
-                print("Could not save: \(error)")
-            }
-        }
-    }
-    
 }
 
 struct EntryFileView_Previews: PreviewProvider {

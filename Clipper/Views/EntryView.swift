@@ -15,8 +15,8 @@ struct EntryView: View {
     var body: some View {
         MasterView()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.gray)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .background(Color.Onyx)
+            .clipShape(RoundedRectangle(cornerRadius: 3))
             .shadow(radius: 10)
     }
     

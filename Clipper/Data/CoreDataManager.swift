@@ -22,6 +22,7 @@ class CoreDataManager : ObservableObject {
                     fatalError()
                 }
             }
+            Self.container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
             Self.initialized = true
         }
     }

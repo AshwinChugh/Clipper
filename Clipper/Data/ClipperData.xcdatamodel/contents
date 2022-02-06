@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Category" representedClassName="Category" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="entries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Entry" inverseName="category" inverseEntity="Entry"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="name"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="Entry" representedClassName="Entry" syncable="YES">
         <attribute name="data" optional="YES" attributeType="Binary"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -7,8 +17,10 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="rawData" optional="YES" attributeType="Binary"/>
         <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="category" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="entries" inverseEntity="Category"/>
     </entity>
     <elements>
-        <element name="Entry" positionX="-54" positionY="-9" width="128" height="119"/>
+        <element name="Category" positionX="-45" positionY="45" width="128" height="74"/>
+        <element name="Entry" positionX="-54" positionY="-9" width="128" height="134"/>
     </elements>
 </model>

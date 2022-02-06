@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct EntryOptionView: View {
+    @Environment(\.managedObjectContext) var moc
     @ObservedObject var data : PasteboardData
     @ObservedObject var PB : PasteboardHistory
     
     @State private var showingAlert = false
     @State private var alertMessage = ""
-    
-    let saveItem : () -> Void
-    let deleteSaved : () -> Void
     
     private var resolvedType : NSPasteboard.PasteboardType {
         let type = data.type
@@ -36,6 +34,7 @@ struct EntryOptionView: View {
             } label: {
                 HStack {
                     Image(systemName: "doc.on.doc")
+                        .imageScale(.medium)
                     Text("Copy")
                         .fixedSize()
                 }
@@ -43,6 +42,7 @@ struct EntryOptionView: View {
                 .padding(.vertical, 5)
                 .foregroundColor(.green)
             }
+            .frame(width: 85, height: 27)
             .buttonStyle(.plain)
             .background(Color.black)
             .clipShape(Capsule())
@@ -56,13 +56,14 @@ struct EntryOptionView: View {
                     PB.history.insert(data)
                 }
                 if data.saved {
-                    saveItem()
+                    self.data.saveItem(self.moc)
                 } else {
-                    deleteSaved()
+                    self.data.deleteSaved(self.moc)
                 }
             } label: {
                 HStack {
                     Image(systemName: data.saved ? "star.fill" : "star")
+                        .imageScale(.medium)
                     Text("Save")
                         .fixedSize()
                 }
@@ -70,6 +71,7 @@ struct EntryOptionView: View {
                 .padding(.vertical, 5)
                 .foregroundColor(.orange)
             }
+            .frame(width: 85, height: 27)
             .buttonStyle(.plain)
             .background(Color.black)
             .clipShape(Capsule())
@@ -77,13 +79,19 @@ struct EntryOptionView: View {
             Spacer()
             
             Button {
-                PB.history.remove(data)
+                withAnimation(.easeOut) {
+                    PB.history.remove(data)
+                }
                 if data.saved {
-                    deleteSaved()
+                    self.data.deleteSaved(self.moc)
+                }
+                if data.rawData == PB.history.sorted(by: >).first?.rawData {
+                    NSPasteboard.general.clearContents();
                 }
             } label: {
                 HStack {
                     Image(systemName: "trash")
+                        .imageScale(.medium)
                     Text("Delete")
                         .fixedSize()
                 }
@@ -91,6 +99,7 @@ struct EntryOptionView: View {
                 .padding(.vertical, 5)
                 .foregroundColor(.red)
             }
+            .frame(width: 85, height: 27)
             .buttonStyle(.plain)
             .background(Color.black)
             .clipShape(Capsule())
@@ -108,10 +117,6 @@ struct EntryOptionView_Previews: PreviewProvider {
     ]
     
     static var previews: some View {
-        EntryOptionView(data: PasteboardData(saved: false, name: "Sample Data", type: .file, data: dict, rawData: NSData(data: (NSImage(systemSymbolName: "app", accessibilityDescription: "app image")?.tiffRepresentation)!) as Data), PB: PasteboardHistory()) {
-            return
-        } deleteSaved : {
-            return
-        }
+        EntryOptionView(data: PasteboardData(saved: false, name: "Sample Data", type: .file, data: dict, rawData: NSData(data: (NSImage(systemSymbolName: "app", accessibilityDescription: "app image")?.tiffRepresentation)!) as Data), PB: PasteboardHistory())
     }
 }
